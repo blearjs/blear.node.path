@@ -64,7 +64,7 @@ var reWinPath = /\\/g;
  * @returns {string}
  */
 var normalize = exports.normalize = function (p) {
-    return path.normalize(String(p)).replace(reWinPath, '/');
+    return path.normalize(p).replace(reWinPath, '/');
 };
 
 
