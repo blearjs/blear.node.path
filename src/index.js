@@ -32,27 +32,33 @@ var extendList = [
     // 'normalize',
     'parse',
     'posix',
-    //'relative',
+    'relative',
     'resolve',
     'sep'
 ];
 
-collection.each(extendList, function (index, pro) {
-    /**
-     * @name exports
-     * @property basename {Function}
-     * @property delimiter {Function}
-     * @property dirname {Function}
-     * @property extname {Function}
-     * @property format {Function}
-     * @property isAbsolute {Function}
-     * @property normalize {Function}
-     * @property parse {Function}
-     * @property posix {Function}
-     * @property sep {Function}
-     */
-    exports[pro] = path[pro];
-});
+
+/**
+ * 复制原始
+ * @param name
+ * @returns {Function}
+ */
+var copyFromNative = function (name) {
+    return function () {
+        var args = access.args(arguments);
+        args = args.map(function (item) {
+            return normalize(item);
+        });
+        return path[name].apply(path, args);
+    };
+};
+
+
+exports.basename = copyFromNative('basename');
+exports.dirname = copyFromNative('dirname');
+exports.extname = copyFromNative('extname');
+exports.relative = copyFromNative('relative');
+exports.resolve = copyFromNative('resolve');
 
 
 var reWinPath = /\\/g;
