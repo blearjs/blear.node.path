@@ -120,9 +120,11 @@ exports.glob = function (globArray, options) {
             var _files2 = [];
 
             collection.each(_files, function (index, file) {
-                if (!map[file]) {
-                    map[file] = true;
-                    _files2.push(file);
+                var file2 = normalize(file);
+
+                if (!map[file2]) {
+                    map[file2] = true;
+                    _files2.push(file2);
                 }
             });
 
