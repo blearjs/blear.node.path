@@ -43,23 +43,28 @@ var object = require('blear.utils.object');
  * @param name
  * @returns {Function}
  */
-var copyFromNative = function (name) {
+var copyFromNative = function (name, normalized) {
     return function () {
         var args = access.args(arguments);
         args = args.map(function (item) {
             return normalize(item);
         });
+
+        if (!normalized) {
+            return path[name].apply(path, args);
+        }
+
         return normalize(path[name].apply(path, args));
     };
 };
 
 
-exports.basename = copyFromNative('basename');
-exports.dirname = copyFromNative('dirname');
-exports.extname = copyFromNative('extname');
-exports.relative = copyFromNative('relative');
-exports.resolve = copyFromNative('resolve');
-exports.join = copyFromNative('join');
+exports.basename = copyFromNative('basename', true);
+exports.dirname = copyFromNative('dirname', true);
+exports.extname = copyFromNative('extname', false);
+exports.relative = copyFromNative('relative', true);
+exports.resolve = copyFromNative('resolve', true);
+exports.join = copyFromNative('join', true);
 
 
 var reWinPath = /\\/g;
@@ -73,8 +78,6 @@ var reWinPath = /\\/g;
 var normalize = exports.normalize = function (p) {
     return path.normalize(p).replace(reWinPath, '/');
 };
-
-
 
 
 var globDefaults = {
