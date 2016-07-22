@@ -21,21 +21,21 @@ var object = require('blear.utils.object');
 //path._makeLong             path.basename              path.delimiter             path.dirname               path.extname               path.format
 //path.isAbsolute            path.join                  path.normalize             path.parse                 path.posix                 path.relative
 //path.resolve               path.sep                   path.win32
-var extendList = [
-    'basename',
-    'delimiter',
-    'dirname',
-    'extname',
-    'format',
-    // 'isAbsolute',
-    //'join',
-    // 'normalize',
-    'parse',
-    'posix',
-    'relative',
-    'resolve',
-    'sep'
-];
+// var extendList = [
+//     'basename',
+//     'delimiter',
+//     'dirname',
+//     'extname',
+//     'format',
+//     // 'isAbsolute',
+//     //'join',
+//     // 'normalize',
+//     'parse',
+//     'posix',
+//     'relative',
+//     'resolve',
+//     'sep'
+// ];
 
 
 /**
@@ -49,7 +49,7 @@ var copyFromNative = function (name) {
         args = args.map(function (item) {
             return normalize(item);
         });
-        return path[name].apply(path, args);
+        return normalize(path[name].apply(path, args));
     };
 };
 
@@ -59,6 +59,7 @@ exports.dirname = copyFromNative('dirname');
 exports.extname = copyFromNative('extname');
 exports.relative = copyFromNative('relative');
 exports.resolve = copyFromNative('resolve');
+exports.join = copyFromNative('join');
 
 
 var reWinPath = /\\/g;
@@ -74,16 +75,6 @@ var normalize = exports.normalize = function (p) {
 };
 
 
-/**
- * 路径合并
- * @type Function
- * @returns {String}
- */
-exports.join = function () {
-    var args = access.args(arguments);
-    args = collection.map(args, normalize);
-    return path.join.apply(path, args);
-};
 
 
 var globDefaults = {
