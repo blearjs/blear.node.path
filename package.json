@@ -1,6 +1,6 @@
 {
   "name": "blear.node.path",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Node 端路径解析、判断、操作",
   "scripts": {
     "live": "browser-sync start --config bs-config.js",
@@ -41,7 +41,6 @@
     "blear.polyfills.array": "^1.0.3",
     "blear.polyfills.object": "^1.0.1",
     "blear.utils.access": "^1.0.2",
-    "blear.utils.array": "^1.0.4",
     "blear.utils.collection": "^1.0.3",
     "blear.utils.object": "^1.0.2",
     "blear.utils.typeis": "^1.0.2",

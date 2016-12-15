@@ -41,6 +41,7 @@ var object = require('blear.utils.object');
 /**
  * 复制原始
  * @param name
+ * @param normalized
  * @returns {Function}
  */
 var copyFromNative = function (name, normalized) {
@@ -96,6 +97,7 @@ var globDefaults = {
  * @param [options.srcDirname] {String} 原始目录
  * @param [options.globOptions] {Object} glob 配置
  * @param [options.progress] {Function} 过程回调
+ * @param [options.filter] {Function} 筛选
  * @returns {Array}
  */
 exports.glob = function (globArray, options) {
@@ -104,6 +106,10 @@ exports.glob = function (globArray, options) {
 
     options = object.assign(true, {}, globDefaults, options);
     globArray = typeis.Array(globArray) ? globArray : [globArray];
+    options.filter = options.filter ||
+        function (indexGlob, indexFile, file) {
+            return true;
+        };
 
     collection.each(globArray, function (indexGlob, p) {
         var p2 = typeis.Array(p) ? p : [p];
@@ -113,8 +119,12 @@ exports.glob = function (globArray, options) {
             var _files = glob.sync(p4, options.globOptions);
             var _files2 = [];
 
-            collection.each(_files, function (index, file) {
+            collection.each(_files, function (indexFile, file) {
                 var file2 = normalize(file);
+
+                if (!options.filter(indexGlob, indexFile, file)) {
+                    return;
+                }
 
                 if (!map[file2]) {
                     map[file2] = true;

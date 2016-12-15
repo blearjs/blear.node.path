@@ -15,10 +15,14 @@ describe('测试文件', function () {
         expect(path.normalize('/a//b/')).to.equal('/a/b/');
         expect(path.normalize('/a\\b/')).to.equal('/a/b/');
     });
-    
+
     it('.glob', function () {
         var paths = path.glob(['**/*.txt'], {
             srcDirname: __dirname,
+            filter: function (indexGlob, indexFile, file) {
+                console.log(indexGlob, indexFile, file);
+                return /-1\.txt$/.test(file);
+            },
             progress: function (indexGlob, indexFile, file) {
                 console.log(indexGlob, indexFile, file);
             }
