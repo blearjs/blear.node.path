@@ -1,6 +1,6 @@
 {
   "name": "blear.node.path",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Node 端路径解析、判断、操作",
   "scripts": {
     "live": "browser-sync start --config bs-config.js",
