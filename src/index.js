@@ -38,38 +38,6 @@ var object = require('blear.utils.object');
 // ];
 
 
-/**
- * 复制原始
- * @param name
- * @param normalized
- * @returns {Function}
- */
-var copyFromNative = function (name, normalized) {
-    return function () {
-        var args = access.args(arguments);
-        args = args.map(function (item) {
-            return normalize(item);
-        });
-
-        if (!normalized) {
-            return path[name].apply(path, args);
-        }
-
-        return normalize(path[name].apply(path, args));
-    };
-};
-
-
-exports.basename = copyFromNative('basename', true);
-exports.dirname = copyFromNative('dirname', true);
-exports.extname = copyFromNative('extname', false);
-exports.relative = copyFromNative('relative', true);
-exports.resolve = copyFromNative('resolve', true);
-exports.join = copyFromNative('join', true);
-
-
-var reWinPath = /\\/g;
-
 
 /**
  * 标准化路径
@@ -77,9 +45,33 @@ var reWinPath = /\\/g;
  * @returns {string}
  */
 var normalize = exports.normalize = function (p) {
-    return path.normalize(p).replace(reWinPath, '/');
+    return path.normalize(p).replace(/\\/g, '/');
 };
 
+var relative = function (p) {
+    return /^.{1,2}\//.test(p) ? p : './' + p;
+};
+
+/**
+ * 复制原始
+ * @param name
+ * @param [format]
+ * @returns {Function}
+ */
+var copyFromNative = function (name, format) {
+    return function () {
+        var args = access.args(arguments);
+        var res = path[name].apply(path, args);
+        return format ? format(res) : res;
+    };
+};
+
+exports.basename = copyFromNative('basename');
+exports.dirname = copyFromNative('dirname');
+exports.extname = copyFromNative('extname');
+exports.relative = copyFromNative('relative', relative);
+exports.resolve = copyFromNative('resolve');
+exports.join = copyFromNative('join');
 
 var globDefaults = {
     glob: [],

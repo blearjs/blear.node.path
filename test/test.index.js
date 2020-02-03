@@ -16,6 +16,11 @@ describe('测试文件', function () {
         expect(path.normalize('/a\\b/')).to.equal('/a/b/');
     });
 
+    it('.relative', function () {
+        expect(path.relative('/a/b/c', '/a/b/c/d')).to.equal('./d');
+        expect(path.relative('/a/b/c', '/a/b/d')).to.equal('../d');
+    });
+
     it('.glob', function () {
         var paths = path.glob(['**/*.txt'], {
             srcDirname: __dirname,
